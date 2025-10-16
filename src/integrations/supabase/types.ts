@@ -14,16 +14,254 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      items: {
+        Row: {
+          campus: string
+          category: Database["public"]["Enums"]["item_category"]
+          condition: Database["public"]["Enums"]["item_condition"]
+          created_at: string
+          description: string
+          id: string
+          is_sold: boolean | null
+          location: string
+          photos: string[] | null
+          price: number
+          seller_id: string
+          title: string
+          updated_at: string
+          views_count: number | null
+        }
+        Insert: {
+          campus: string
+          category: Database["public"]["Enums"]["item_category"]
+          condition: Database["public"]["Enums"]["item_condition"]
+          created_at?: string
+          description: string
+          id?: string
+          is_sold?: boolean | null
+          location: string
+          photos?: string[] | null
+          price: number
+          seller_id: string
+          title: string
+          updated_at?: string
+          views_count?: number | null
+        }
+        Update: {
+          campus?: string
+          category?: Database["public"]["Enums"]["item_category"]
+          condition?: Database["public"]["Enums"]["item_condition"]
+          created_at?: string
+          description?: string
+          id?: string
+          is_sold?: boolean | null
+          location?: string
+          photos?: string[] | null
+          price?: number
+          seller_id?: string
+          title?: string
+          updated_at?: string
+          views_count?: number | null
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_read: boolean | null
+          item_id: string
+          receiver_id: string
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          item_id: string
+          receiver_id: string
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          item_id?: string
+          receiver_id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          average_rating: number | null
+          campus_affiliation: string
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          total_reviews: number | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          average_rating?: number | null
+          campus_affiliation: string
+          created_at?: string
+          email: string
+          full_name: string
+          id: string
+          total_reviews?: number | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          average_rating?: number | null
+          campus_affiliation?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          total_reviews?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          comment: string | null
+          created_at: string
+          id: string
+          rating: number
+          reviewee_id: string
+          reviewer_id: string
+          transaction_id: string | null
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating: number
+          reviewee_id: string
+          reviewer_id: string
+          transaction_id?: string | null
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating?: number
+          reviewee_id?: string
+          reviewer_id?: string
+          transaction_id?: string | null
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          buyer_id: string
+          commission: number
+          completed_at: string | null
+          created_at: string
+          id: string
+          item_id: string
+          seller_id: string
+          seller_payout: number
+          status: Database["public"]["Enums"]["transaction_status"] | null
+        }
+        Insert: {
+          amount: number
+          buyer_id: string
+          commission: number
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          item_id: string
+          seller_id: string
+          seller_payout: number
+          status?: Database["public"]["Enums"]["transaction_status"] | null
+        }
+        Update: {
+          amount?: number
+          buyer_id?: string
+          commission?: number
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          item_id?: string
+          seller_id?: string
+          seller_payout?: number
+          status?: Database["public"]["Enums"]["transaction_status"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "buyer" | "seller"
+      item_category:
+        | "textbooks"
+        | "electronics"
+        | "furniture"
+        | "clothing"
+        | "instruments"
+        | "sports"
+        | "services"
+      item_condition: "new" | "like_new" | "good" | "fair" | "used_for_parts"
+      transaction_status: "pending" | "completed" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +388,19 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["buyer", "seller"],
+      item_category: [
+        "textbooks",
+        "electronics",
+        "furniture",
+        "clothing",
+        "instruments",
+        "sports",
+        "services",
+      ],
+      item_condition: ["new", "like_new", "good", "fair", "used_for_parts"],
+      transaction_status: ["pending", "completed", "cancelled"],
+    },
   },
 } as const
