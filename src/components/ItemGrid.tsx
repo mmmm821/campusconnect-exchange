@@ -103,7 +103,7 @@ const ItemGrid = () => {
                   <h3 className="font-semibold text-lg line-clamp-1 group-hover:text-primary transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-2xl font-bold text-primary mt-1">${item.price}</p>
+                  <p className="text-2xl font-bold text-primary mt-1">₹{item.price}</p>
                 </div>
                 
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
