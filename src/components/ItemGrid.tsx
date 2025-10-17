@@ -8,7 +8,7 @@ const items = [
   {
     id: 1,
     title: "Calculus Textbook - 8th Edition",
-    price: 45,
+    price: 550,
     condition: "Like New",
     image: "https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?w=400",
     seller: "Sarah M.",
@@ -19,7 +19,7 @@ const items = [
   {
     id: 2,
     title: "MacBook Pro 2020 - 13 inch",
-    price: 850,
+    price: 85000,
     condition: "Good",
     image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400",
     seller: "Mike T.",
@@ -30,7 +30,7 @@ const items = [
   {
     id: 3,
     title: "Mini Fridge - Perfect for Dorm",
-    price: 75,
+    price: 9000,
     condition: "Good",
     image: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=400",
     seller: "Jessica L.",
@@ -41,7 +41,7 @@ const items = [
   {
     id: 4,
     title: "Gaming Chair - Ergonomic",
-    price: 120,
+    price: 7000,
     condition: "Like New",
     image: "https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=400",
     seller: "David K.",
@@ -50,20 +50,9 @@ const items = [
     category: "Furniture"
   },
   {
-    id: 5,
-    title: "iPhone 12 - Unlocked",
-    price: 450,
-    condition: "Good",
-    image: "https://images.unsplash.com/photo-1592286927505-c8c72e1f6b34?w=400",
-    seller: "Emma R.",
-    rating: 4.9,
-    location: "Main Campus",
-    category: "Electronics"
-  },
-  {
     id: 6,
     title: "Chemistry Lab Manual",
-    price: 25,
+    price: 250,
     condition: "New",
     image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400",
     seller: "Alex P.",
