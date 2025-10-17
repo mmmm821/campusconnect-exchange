@@ -2,67 +2,96 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Star } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
-// Mock data
+// Mock data for fallback
 const items = [
   {
-    id: 1,
+    id: "1",
     title: "Calculus Textbook - 8th Edition",
     price: 550,
-    condition: "Like New",
+    condition: "like_new",
     image: "https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?w=400",
     seller: "Sarah M.",
     rating: 4.9,
     location: "North Campus",
-    category: "Textbooks"
+    category: "textbooks"
   },
   {
-    id: 2,
+    id: "2",
     title: "MacBook Pro 2020 - 13 inch",
     price: 85000,
-    condition: "Good",
+    condition: "good",
     image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400",
     seller: "Mike T.",
     rating: 5.0,
     location: "West Dorm",
-    category: "Electronics"
+    category: "electronics"
   },
   {
-    id: 3,
+    id: "3",
     title: "Mini Fridge - Perfect for Dorm",
     price: 9000,
-    condition: "Good",
+    condition: "good",
     image: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=400",
     seller: "Jessica L.",
     rating: 4.7,
     location: "South Campus",
-    category: "Furniture"
+    category: "furniture"
   },
   {
-    id: 4,
+    id: "4",
     title: "Gaming Chair - Ergonomic",
     price: 7000,
-    condition: "Like New",
+    condition: "like_new",
     image: "https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=400",
     seller: "David K.",
     rating: 4.8,
     location: "East Dorm",
-    category: "Furniture"
+    category: "furniture"
   },
   {
-    id: 6,
+    id: "5",
     title: "Chemistry Lab Manual",
     price: 250,
-    condition: "New",
+    condition: "new",
     image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400",
     seller: "Alex P.",
     rating: 5.0,
     location: "Science Building",
-    category: "Textbooks"
+    category: "textbooks"
   }
 ];
 
 const ItemGrid = () => {
+  const { data: dbItems, isLoading } = useQuery({
+    queryKey: ["items"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("items")
+        .select("*")
+        .eq("is_sold", false)
+        .order("created_at", { ascending: false })
+        .limit(6);
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const displayItems = dbItems && dbItems.length > 0 ? dbItems.map(item => ({
+    id: item.id,
+    title: item.title,
+    price: item.price,
+    condition: item.condition.replace("_", " "),
+    image: item.photos?.[0] || "https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?w=400",
+    seller: "User",
+    rating: 4.8,
+    location: item.location,
+    category: item.category
+  })) : items;
+
   return (
     <section className="py-16">
       <div className="container mx-auto px-4">
@@ -74,50 +103,54 @@ const ItemGrid = () => {
           <Button variant="outline">View All</Button>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {items.map((item) => (
-            <Card key={item.id} className="group cursor-pointer overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1">
-              <div className="relative overflow-hidden aspect-square">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <Badge className="absolute top-3 right-3 bg-success text-success-foreground">
-                  {item.condition}
-                </Badge>
-              </div>
-              <CardContent className="p-4">
-                <div className="mb-2">
-                  <h3 className="font-semibold text-lg line-clamp-1 group-hover:text-primary transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="text-2xl font-bold text-primary mt-1">₹{item.price}</p>
+        {isLoading ? (
+          <div className="text-center py-8">Loading items...</div>
+        ) : (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {displayItems.map((item) => (
+              <Card key={item.id} className="group cursor-pointer overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1">
+                <div className="relative overflow-hidden aspect-square">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <Badge className="absolute top-3 right-3 bg-success text-success-foreground">
+                    {item.condition}
+                  </Badge>
                 </div>
-                
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                  <MapPin className="h-4 w-4" />
-                  <span>{item.location}</span>
-                </div>
+                <CardContent className="p-4">
+                  <div className="mb-2">
+                    <h3 className="font-semibold text-lg line-clamp-1 group-hover:text-primary transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-2xl font-bold text-primary mt-1">₹{item.price}</p>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                    <MapPin className="h-4 w-4" />
+                    <span>{item.location}</span>
+                  </div>
 
-                <div className="flex items-center justify-between pt-3 border-t">
-                  <div className="flex items-center gap-2">
-                    <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-sm font-semibold text-primary">
-                        {item.seller[0]}
-                      </span>
+                  <div className="flex items-center justify-between pt-3 border-t">
+                    <div className="flex items-center gap-2">
+                      <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                        <span className="text-sm font-semibold text-primary">
+                          {item.seller[0]}
+                        </span>
+                      </div>
+                      <span className="text-sm font-medium">{item.seller}</span>
                     </div>
-                    <span className="text-sm font-medium">{item.seller}</span>
+                    <div className="flex items-center gap-1">
+                      <Star className="h-4 w-4 fill-accent text-accent" />
+                      <span className="text-sm font-semibold">{item.rating}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 fill-accent text-accent" />
-                    <span className="text-sm font-semibold">{item.rating}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
