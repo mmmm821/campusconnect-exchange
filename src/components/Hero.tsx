@@ -23,22 +23,6 @@ const Hero = () => {
                 List an Item
               </Button>
             </div>
-            <div className="flex items-center gap-6 pt-4">
-              <div>
-                <div className="text-3xl font-bold">10K+</div>
-                <div className="text-white/80 text-sm">Active Users</div>
-              </div>
-              <div className="w-px h-12 bg-white/30"></div>
-              <div>
-                <div className="text-3xl font-bold">50K+</div>
-                <div className="text-white/80 text-sm">Items Sold</div>
-              </div>
-              <div className="w-px h-12 bg-white/30"></div>
-              <div>
-                <div className="text-3xl font-bold">4.8★</div>
-                <div className="text-white/80 text-sm">Avg Rating</div>
-              </div>
-            </div>
           </div>
           <div className="relative">
             <img
