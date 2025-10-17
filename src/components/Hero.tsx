@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-marketplace.jpg";
 
 const Hero = () => {
+  const navigate = useNavigate();
   return (
     <section className="relative overflow-hidden bg-gradient-hero py-20 lg:py-32">
       <div className="container mx-auto px-4">
@@ -19,7 +20,7 @@ const Hero = () => {
               <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-white/90 font-semibold">
                 Start Browsing
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10" onClick={() => navigate("/sell")}>
                 List an Item
               </Button>
             </div>
