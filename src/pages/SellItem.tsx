@@ -10,6 +10,27 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { ArrowLeft } from "lucide-react";
+import { z } from "zod";
+
+const itemSchema = z.object({
+  title: z.string()
+    .min(3, "Title must be at least 3 characters")
+    .max(100, "Title must be less than 100 characters"),
+  description: z.string()
+    .min(10, "Description must be at least 10 characters")
+    .max(2000, "Description must be less than 2000 characters"),
+  price: z.number()
+    .positive("Price must be positive")
+    .max(1000000, "Price must be less than 1,000,000"),
+  condition: z.enum(["new", "like_new", "good", "fair", "used_for_parts"]),
+  category: z.enum(["textbooks", "electronics", "furniture", "clothing", "instruments", "sports", "services"]),
+  location: z.string()
+    .min(2, "Location must be at least 2 characters")
+    .max(100, "Location must be less than 100 characters"),
+  campus: z.string()
+    .min(2, "Campus must be at least 2 characters")
+    .max(100, "Campus must be less than 100 characters"),
+});
 
 const SellItem = () => {
   const navigate = useNavigate();
@@ -40,6 +61,17 @@ const SellItem = () => {
     setLoading(true);
 
     try {
+      // Validate input data
+      const validatedData = itemSchema.parse({
+        title: formData.title,
+        description: formData.description,
+        price: parseFloat(formData.price),
+        condition: formData.condition,
+        category: formData.category,
+        location: formData.location,
+        campus: formData.campus,
+      });
+
       // Check if user has seller role
       const { data: roles } = await supabase
         .from("user_roles")
@@ -57,13 +89,13 @@ const SellItem = () => {
 
       const { error } = await supabase.from("items").insert([{
         seller_id: user.id,
-        title: formData.title,
-        description: formData.description,
-        price: parseFloat(formData.price),
-        condition: formData.condition as any,
-        category: formData.category as any,
-        location: formData.location,
-        campus: formData.campus,
+        title: validatedData.title,
+        description: validatedData.description,
+        price: validatedData.price,
+        condition: validatedData.condition as any,
+        category: validatedData.category as any,
+        location: validatedData.location,
+        campus: validatedData.campus,
       }]);
 
       if (error) throw error;
@@ -75,11 +107,19 @@ const SellItem = () => {
 
       navigate("/");
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to list item",
-        variant: "destructive",
-      });
+      if (error instanceof z.ZodError) {
+        toast({
+          title: "Validation Error",
+          description: error.errors[0].message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: error.message || "Failed to list item",
+          variant: "destructive",
+        });
+      }
     } finally {
       setLoading(false);
     }
