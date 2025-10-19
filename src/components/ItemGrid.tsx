@@ -1,9 +1,13 @@
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Star } from "lucide-react";
+import { MapPin, Star, ShoppingCart } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import BuyItemDialog from "./BuyItemDialog";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 // Mock data for fallback
 const items = [
@@ -65,6 +69,11 @@ const items = [
 ];
 
 const ItemGrid = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [selectedItem, setSelectedItem] = useState<any>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
   const { data: dbItems, isLoading } = useQuery({
     queryKey: ["items"],
     queryFn: async () => {
@@ -87,10 +96,20 @@ const ItemGrid = () => {
     condition: item.condition.replace("_", " "),
     image: item.photos?.[0] || "https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?w=400",
     seller: "User",
+    seller_id: item.seller_id,
     rating: 4.8,
     location: item.location,
     category: item.category
   })) : items;
+
+  const handleBuyClick = (item: any) => {
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+    setSelectedItem(item);
+    setDialogOpen(true);
+  };
 
   return (
     <section className="py-16">
@@ -146,10 +165,26 @@ const ItemGrid = () => {
                       <span className="text-sm font-semibold">{item.rating}</span>
                     </div>
                   </div>
+                  
+                  <Button 
+                    className="w-full mt-4" 
+                    onClick={() => handleBuyClick(item)}
+                  >
+                    <ShoppingCart className="h-4 w-4 mr-2" />
+                    Buy Now
+                  </Button>
                 </CardContent>
               </Card>
             ))}
           </div>
+        )}
+        
+        {selectedItem && (
+          <BuyItemDialog
+            item={selectedItem}
+            open={dialogOpen}
+            onOpenChange={setDialogOpen}
+          />
         )}
       </div>
     </section>

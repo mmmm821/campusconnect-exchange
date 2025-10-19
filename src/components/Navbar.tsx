@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, ShoppingBag, User, Plus, LogOut } from "lucide-react";
+import { Search, ShoppingBag, User, Plus, LogOut, Receipt } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
@@ -34,6 +34,10 @@ const Navbar = () => {
                 <Button size="sm" className="bg-primary hover:bg-primary-hover" onClick={() => navigate("/sell")}>
                   <Plus className="h-4 w-4 mr-2" />
                   Sell Item
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => navigate("/transactions")}>
+                  <Receipt className="h-4 w-4 mr-2" />
+                  Transactions
                 </Button>
                 <Button variant="ghost" size="sm" onClick={signOut}>
                   <LogOut className="h-4 w-4 mr-2" />
