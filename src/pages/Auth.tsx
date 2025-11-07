@@ -110,7 +110,7 @@ const Auth = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-hero p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">CampusConnect</CardTitle>
+          <CardTitle className="text-2xl text-center">Campus Connect</CardTitle>
           <CardDescription className="text-center">
             Your campus marketplace awaits
           </CardDescription>
