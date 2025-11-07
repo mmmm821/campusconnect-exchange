@@ -14,7 +14,7 @@ const Navbar = () => {
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-2">
               <ShoppingBag className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold text-foreground">CampusConnect</span>
+              <span className="text-xl font-bold text-foreground">Campus Connect</span>
             </div>
             
             <div className="hidden md:flex items-center gap-2 flex-1 max-w-md">

@@ -8,7 +8,7 @@ const Footer = () => {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <ShoppingBag className="h-6 w-6 text-primary" />
-              <span className="text-lg font-bold">CampusConnect</span>
+              <span className="text-lg font-bold">Campus Connect</span>
             </div>
             <p className="text-sm text-muted-foreground">
               Your trusted campus marketplace for buying and selling student essentials.
@@ -45,7 +45,7 @@ const Footer = () => {
         </div>
 
         <div className="pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>© 2024 CampusConnect Marketplace. All rights reserved.</p>
+          <p>© 2024 Campus Connect Marketplace. All rights reserved.</p>
         </div>
       </div>
     </footer>
